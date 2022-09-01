@@ -1,6 +1,6 @@
-import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn, Timestamp } from "typeorm";
+import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
 
-import { Event } from "src/events/entities/event.entity"
+import { Event } from "../../events/entities/event.entity"
 
 @Entity({name: "Schools"})
 export class School {
