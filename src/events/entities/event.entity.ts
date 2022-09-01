@@ -1,4 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn, Timestamp } from "typeorm";
+import { School } from "../../school/entities/school.entity";
+import { Student } from "../../student/entities/student.entity";
+import { Column, Entity, ManyToMany, PrimaryGeneratedColumn, Timestamp } from "typeorm";
 
 @Entity({name: "Events"})
 export class Event {
@@ -11,12 +13,18 @@ export class Event {
     @Column()
     local: string
 
-    @Column()
-    time: Timestamp
+    @Column({type: "timestamp", nullable: true})
+    time: Date 
 
     @Column()
     capacity: number
 
     @Column()
-    filled: boolean
+    filled: number
+    
+    // @ManyToMany(() => Student, (student) => student.events)
+    // students: Student[]
+
+    // @ManyToMany(() => School, (school) => school.events)
+    // schools: School[]   
 }
