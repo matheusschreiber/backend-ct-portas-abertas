@@ -33,4 +33,12 @@ export class EventsService {
   remove(id: number) {
     return `This action removes a #${id} event`;
   }
+
+  //function without controller
+  async updateFilled(id: object) {
+    const event = await this.eventRepo.findOneBy(id)
+    event.filled+=1
+    return this.eventRepo.save(event)
+  }
+
 }
