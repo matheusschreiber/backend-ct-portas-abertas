@@ -1,15 +1,25 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreateSchoolDto } from './dto/create-school.dto';
 import { UpdateSchoolDto } from './dto/update-school.dto';
+import { School } from './entities/school.entity';
 
 @Injectable()
 export class SchoolService {
+
+  constructor(
+    @InjectRepository(School)
+    private schoolRepo: Repository<School>
+  ){}
+
   create(createSchoolDto: CreateSchoolDto) {
-    return 'This action adds a new school';
+    const school = this.schoolRepo.create(createSchoolDto)
+    return this.schoolRepo.save(school)
   }
 
   findAll() {
-    return `This action returns all school`;
+    return this.schoolRepo.find({relations: ["events"]})
   }
 
   findOne(id: number) {
