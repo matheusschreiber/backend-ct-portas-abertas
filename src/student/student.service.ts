@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateStudentDto } from './dto/create-student.dto';
@@ -6,6 +6,7 @@ import { UpdateStudentDto } from './dto/update-student.dto';
 import { Student } from './entities/student.entity';
 import { Event } from '../events/entities/event.entity';
 import { EventsService } from '../events/events.service';
+import { EventEmitter } from 'stream';
 
 @Injectable()
 export class StudentService {
@@ -33,18 +34,19 @@ export class StudentService {
 
   async update(id: number, updateStudentDto: UpdateStudentDto) {
 
-    //ID do evento(objeto)
     const eventID = await updateStudentDto.events[0]
-    //instância do evento que foi passado pelo ID do body
-    const eventbyid = await this.eventRepo.findOneBy(eventID)
-    //instância do estudante que será atualizado 
+    const event = await this.eventRepo.findOneBy(eventID)
     let student = await this.findOne(id)
-    //Adicionando o evento novo nos eventos do estudante
-    student.events.push(eventbyid)
-    
-    //atualizando o filled do evento
-    await this.eventService.updateFilled(eventID)
 
+    //Se o estudante já está cadastrado no evento
+    const foundEvent = student.events.find(event => event.id === event.id)
+    if(foundEvent){
+      throw new HttpException("coro e cacete", HttpStatus.BAD_REQUEST)
+    }
+
+    await this.eventService.updateFilled(eventID)
+    student.events.push(event)
+    
     return await this.studentRepo.save(student)
   }
 
