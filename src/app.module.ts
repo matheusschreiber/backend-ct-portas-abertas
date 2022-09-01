@@ -1,12 +1,26 @@
 import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { EventsModule } from './events/events.module';
 import { SchoolModule } from './school/school.module';
 import { StudentModule } from './student/student.module';
+import { Event } from './events/entities/event.entity';
+import { School } from './school/entities/school.entity';
+import { Student } from './student/entities/student.entity';
 
 @Module({
-  imports: [EventsModule, SchoolModule, StudentModule],
+  imports: [TypeOrmModule.forRoot({
+    type: "postgres",
+    host: "localhost",
+    port: 5432,
+    username: "postgres",
+    password: "root",
+    database: "store",
+    synchronize: true,
+    logging: false,
+    entities: [Student, School, Event]
+  }) ,EventsModule, SchoolModule, StudentModule],
   controllers: [AppController],
   providers: [AppService],
 })
