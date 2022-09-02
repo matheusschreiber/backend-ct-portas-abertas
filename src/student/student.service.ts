@@ -6,7 +6,6 @@ import { UpdateStudentDto } from './dto/update-student.dto';
 import { Student } from './entities/student.entity';
 import { Event } from '../events/entities/event.entity';
 import { EventsService } from '../events/events.service';
-import { EventEmitter } from 'stream';
 
 @Injectable()
 export class StudentService {
@@ -41,7 +40,7 @@ export class StudentService {
     //Se o estudante já está cadastrado no evento
     const foundEvent = student.events.find(event => event.id === event.id)
     if(foundEvent){
-      throw new HttpException("coro e cacete", HttpStatus.BAD_REQUEST)
+      throw new HttpException("You are already registered at event", HttpStatus.BAD_REQUEST)
     }
 
     await this.eventService.updateFilled(eventID)
