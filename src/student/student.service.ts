@@ -18,17 +18,17 @@ export class StudentService {
     private eventService: EventsService
   ){}
 
-  create(createStudentDto: CreateStudentDto) {
-    const student = this.studentRepo.create(createStudentDto);
-    return this.studentRepo.save(student);
+  async create(createStudentDto: CreateStudentDto) {
+    const student = await this.studentRepo.create(createStudentDto);
+    return await this.studentRepo.save(student);
   }
 
-  findAll() {
-    return this.studentRepo.find({relations: ["events"]});
+  async findAll() {
+    return await this.studentRepo.find({relations: ["events"]});
   }
 
-  findOne(id: number) {
-    return this.studentRepo.findOne({where: {id: id}, relations: ["events"]})
+  async findOne(id: number) {
+    return await this.studentRepo.findOne({where: {id: id}, relations: ["events"]})
   }
 
   async update(id: number, updateStudentDto: UpdateStudentDto) {
@@ -49,7 +49,7 @@ export class StudentService {
     return await this.studentRepo.save(student)
   }
 
-  remove(id: number) {
-    return this.studentRepo.delete(id);
+  async remove(id: number) {
+    return await this.studentRepo.delete(id);
   }
 }
