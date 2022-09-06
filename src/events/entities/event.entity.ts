@@ -2,6 +2,11 @@ import { School } from "../../school/entities/school.entity";
 import { Student } from "../../student/entities/student.entity";
 import { Column, Entity, ManyToMany, PrimaryGeneratedColumn, Timestamp } from "typeorm";
 
+export enum EventType {
+    visit = 'visit',
+    workshop = 'workshop'
+}
+
 @Entity({name: "Events"})
 export class Event {
     @PrimaryGeneratedColumn()
@@ -19,12 +24,16 @@ export class Event {
     @Column()
     capacity: number
 
-    @Column()
+    @Column({default: 0})
     filled: number
-    
-    // @ManyToMany(() => Student, (student) => student.events)
+
+    @Column({ type: 'enum', enum: EventType, nullable: true })
+    type: EventType
+}
+
+//Caso precise posteriormente
+// @ManyToMany(() => Student, (student) => student.events)
     // students: Student[]
 
     // @ManyToMany(() => School, (school) => school.events)
-    // schools: School[]   
-}
+    // schools: School[]  

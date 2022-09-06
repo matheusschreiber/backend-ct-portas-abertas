@@ -13,32 +13,31 @@ export class EventsService {
     private eventRepo: Repository<Event>
   ){}
 
-  create(createEventDto: CreateEventDto) {
-    const event = this.eventRepo.create(createEventDto);
-    return this.eventRepo.save(event);
+  async create(createEventDto: CreateEventDto) {
+    const event = await this.eventRepo.create(createEventDto);
+    return await this.eventRepo.save(event);
   }
 
-  findAll() {
-    return this.eventRepo.find();
+  async findAll() {
+    return await this.eventRepo.find();
   }
 
-  findOne(id: number) {
-    return this.eventRepo.findOneBy({id: id});
+  async findOne(id: number) {
+    return await this.eventRepo.findOneBy({id: id});
   }
 
-  update(id: number, updateEventDto: UpdateEventDto) {
-    return `This action updates a #${id} event`;
+  async update(id: number, updateEventDto: UpdateEventDto) {
+    return await this.eventRepo.update(id, updateEventDto);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} event`;
+  async remove(id: number) {
+    return await this.eventRepo.delete(id); 
   }
 
   //function without controller
-  async updateFilled(id: object) {
+  async updateFilled(id: object, amount: number) {
     const event = await this.eventRepo.findOneBy(id)
-    event.filled+=1
+    event.filled+=amount
     return this.eventRepo.save(event)
   }
-
 }
