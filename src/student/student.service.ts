@@ -33,17 +33,22 @@ export class StudentService {
 
   async update(id: number, updateStudentDto: UpdateStudentDto) {
 
-    const eventID = await updateStudentDto.events[0]
+    const eventID = updateStudentDto.event
     const event = await this.eventRepo.findOneBy(eventID)
     let student = await this.findOne(id)
 
+    // Se o evento já estiver cheio
+    if(event.capacity === event.filled){
+      throw new HttpException("Event is already full", HttpStatus.BAD_REQUEST)
+    }
+
     //Se o estudante já está cadastrado no evento
-    const foundEvent = student.events.find(event => event.id === event.id)
+    const foundEvent = student.events.find(stdevent => stdevent.id === event.id)
     if(foundEvent){
       throw new HttpException("You are already registered at event", HttpStatus.BAD_REQUEST)
     }
 
-    await this.eventService.updateFilled(eventID)
+    await this.eventService.updateFilled(eventID,1)
     student.events.push(event)
     
     return await this.studentRepo.save(student)
