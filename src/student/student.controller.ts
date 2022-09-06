@@ -22,9 +22,14 @@ export class StudentController {
     return this.studentService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body(new ValidationPipe({errorHttpStatusCode: 422})) updateStudentDto: UpdateStudentDto) {
-    return this.studentService.update(+id, updateStudentDto);
+  @Patch('add-event/:id')
+  addEvent(@Param('id') id: string, @Body(new ValidationPipe({errorHttpStatusCode: 422})) updateStudentDto: UpdateStudentDto) {
+    return this.studentService.addEvent(+id, updateStudentDto);
+  }
+
+  @Patch('remove-event/:id')
+  removeEvent(@Param('id') id: string, @Body(new ValidationPipe({errorHttpStatusCode: 422})) updateStudentDto: UpdateStudentDto) {
+    return this.studentService.removeEvent(+id, updateStudentDto);
   }
 
   @Delete(':id')

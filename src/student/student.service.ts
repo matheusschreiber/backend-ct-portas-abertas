@@ -31,7 +31,7 @@ export class StudentService {
     return await this.studentRepo.findOne({where: {id: id}, relations: ["events"]})
   }
 
-  async update(id: number, updateStudentDto: UpdateStudentDto) {
+  async addEvent(id: number, updateStudentDto: UpdateStudentDto) {
 
     const eventID = updateStudentDto.event
     const event = await this.eventRepo.findOneBy(eventID)
@@ -53,6 +53,25 @@ export class StudentService {
     
     return await this.studentRepo.save(student)
   }
+
+  async removeEvent(id: number, updateStudentDto: UpdateStudentDto){
+
+    const eventID = updateStudentDto.event
+    const event = await this.eventRepo.findOneBy(eventID)
+    let student = await this.findOne(id)
+
+    const foundEvent = student.events.find(stdevent => stdevent.id === event.id)
+    if(!foundEvent){
+      throw new HttpException("You are not registered at this event", HttpStatus.BAD_REQUEST)
+    }
+
+    const studentEvents = student.events
+    studentEvents.splice(studentEvents.indexOf(event),1)
+    
+    await this.eventService.updateFilled(eventID,-1)
+    return await this.studentRepo.save(student)
+  }
+
 
   async remove(id: number) {
     return await this.studentRepo.delete(id);
