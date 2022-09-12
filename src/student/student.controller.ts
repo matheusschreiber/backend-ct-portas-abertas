@@ -1,7 +1,19 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ValidationPipe } from '@nestjs/common';
+import { 
+Controller,
+Get,
+Post,
+Body,
+Request,
+Patch,
+Param,
+Delete,
+ValidationPipe,
+UseGuards
+} from '@nestjs/common';
 import { StudentService } from './student.service';
 import { CreateStudentDto } from './dto/create-student.dto';
 import { UpdateStudentDto } from './dto/update-student.dto';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('student')
 export class StudentController {
@@ -10,6 +22,12 @@ export class StudentController {
   @Post()
   create(@Body(new ValidationPipe({errorHttpStatusCode: 422})) createStudentDto: CreateStudentDto) {
     return this.studentService.create(createStudentDto);
+  }
+
+  @UseGuards(AuthGuard('local'))
+  @Post('auth/login')
+  async login(@Request() req) {
+    return req.user;
   }
 
   @Get()

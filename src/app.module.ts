@@ -8,6 +8,7 @@ import { StudentModule } from './student/student.module';
 import { Event } from './events/entities/event.entity';
 import { School } from './school/entities/school.entity';
 import { Student } from './student/entities/student.entity';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [TypeOrmModule.forRoot({
@@ -20,7 +21,7 @@ import { Student } from './student/entities/student.entity';
     synchronize: true,
     logging: false,
     entities: [Student, School, Event]
-  }) ,EventsModule, SchoolModule, StudentModule],
+  }) ,EventsModule, SchoolModule, StudentModule, AuthModule],
   controllers: [AppController],
   providers: [AppService],
 })

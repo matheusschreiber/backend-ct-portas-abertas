@@ -9,6 +9,7 @@ import { EventsService } from '../events/events.service';
 @Module({
   imports: [TypeOrmModule.forFeature([Student, Event])],
   controllers: [StudentController],
-  providers: [StudentService, EventsService]
+  providers: [StudentService, EventsService],
+  exports: [StudentService]
 })
 export class StudentModule {}
