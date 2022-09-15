@@ -8,7 +8,11 @@ export class AuthService {
 
     async validateStudent(email: string, pass: string): Promise<any> {
         const student = await this.studentService.findOneLogin(email);
-        if (student && bcrypt.compareSync(pass, student.password)) {
+        // if (student && bcrypt.compareSync(pass, student.password)) {
+        //     const { password, ...result } = student;
+        //     return result;
+        // }
+        if (student && pass === student.password) {
             const { password, ...result } = student;
             return result;
         }
