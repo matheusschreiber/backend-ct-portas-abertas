@@ -14,10 +14,14 @@ import { StudentService } from './student.service';
 import { CreateStudentDto } from './dto/create-student.dto';
 import { UpdateStudentDto } from './dto/update-student.dto';
 import { AuthGuard } from '@nestjs/passport';
+import { AuthService } from '../auth/auth.service';
 
 @Controller('student')
 export class StudentController {
-  constructor(private readonly studentService: StudentService) {}
+  constructor(
+    private readonly studentService: StudentService,
+    private authService: AuthService
+  ) {}
 
   @Post()
   create(@Body(new ValidationPipe({errorHttpStatusCode: 422})) createStudentDto: CreateStudentDto) {
@@ -27,7 +31,7 @@ export class StudentController {
   @UseGuards(AuthGuard('local'))
   @Post('auth/login')
   async login(@Request() req) {
-    return req.user;
+    return this.authService.login(req.user);
   }
 
   @Get()
