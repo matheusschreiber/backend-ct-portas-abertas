@@ -21,7 +21,7 @@ import { AuthModule } from './auth/auth.module';
     synchronize: true,
     logging: false,
     entities: [Student, School, Event]
-  }) ,EventsModule, SchoolModule, StudentModule, AuthModule],
+  }) ,EventsModule, SchoolModule, AuthModule],
   controllers: [AppController],
   providers: [AppService],
 })
