@@ -10,10 +10,18 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(username: string, password: string): Promise<any> {
-    const user = await this.authService.validateStudent(username, password);
-    if (!user) {
+    const userStudent = await this.authService.validateStudent(username, password);
+    const userSchool = await this.authService.validateSchool(username, password);
+    /*
+      Se não for um aluno ou escola, retorna um erro.
+      Considerando que não tem como um aluno e uma escola terem o mesmo email.
+    */
+    if (!userStudent && userSchool) {
+      return userSchool;
+    } else if (userStudent && !userSchool) {
+      return userStudent;
+    } else {
       throw new UnauthorizedException();
     }
-    return user;
   }
 }
