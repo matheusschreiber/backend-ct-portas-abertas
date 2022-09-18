@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { StudentService } from '../student/student.service';
+import { SchoolService } from '../school/school.service';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 
@@ -7,6 +8,7 @@ import { JwtService } from '@nestjs/jwt';
 export class AuthService {
     constructor(
         private studentService: StudentService,
+        private schoolService: SchoolService,
         private jwtService: JwtService
     ) {}
 
@@ -18,6 +20,19 @@ export class AuthService {
         // }
         if (student && pass === student.password) {
             const { password, ...result } = student;
+            return result;
+        }
+        return null;
+    }
+
+    async validateSchool(email: string, pass: string): Promise<any> {
+        const school = await this.schoolService.findOneLogin(email);
+        // if (school && bcrypt.compareSync(pass, school.password)) {
+        //     const { password, ...result } = school;
+        //     return result;
+        // }
+        if (school && pass === school.password) {
+            const { password, ...result } = school;
             return result;
         }
         return null;
