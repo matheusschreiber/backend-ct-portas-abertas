@@ -15,6 +15,7 @@ import { CreateSchoolDto } from './dto/create-school.dto';
 import { UpdateSchoolDto } from './dto/update-school.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from '../auth/auth.service';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @Controller('school')
 export class SchoolController {
@@ -44,16 +45,19 @@ export class SchoolController {
     return this.schoolService.findOne(+id);
   }
 
+  @UseGuards(JwtAuthGuard) // para usar essa rota, é necessário passar o token no header da requisição
   @Patch('add-event/:id')
   addEvent(@Param('id') id: string, @Body(new ValidationPipe({errorHttpStatusCode: 422})) updateSchoolDto: UpdateSchoolDto) {
     return this.schoolService.addEvent(+id, updateSchoolDto);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Patch('remove-event/:id')
   removeEvent(@Param('id') id: string, @Body(new ValidationPipe({errorHttpStatusCode: 422})) updateSchoolDto: UpdateSchoolDto) {
     return this.schoolService.removeEvent(+id, updateSchoolDto);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.schoolService.remove(+id);
