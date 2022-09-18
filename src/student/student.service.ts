@@ -78,6 +78,5 @@ export class StudentService {
 
   async findOneLogin(email: string): Promise<Student | undefined> {
     return await this.studentRepo.findOne({where: {email: email}});
-    // return await this.studentRepo.findOne({email: email});
   }
 }
