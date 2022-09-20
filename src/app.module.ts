@@ -9,6 +9,8 @@ import { Event } from './events/entities/event.entity';
 import { School } from './school/entities/school.entity';
 import { Student } from './student/entities/student.entity';
 import { AuthModule } from './auth/auth.module';
+import { TokenModule } from './token/token.module';
+import { Token } from './token/entities/token.entity';
 
 @Module({
   imports: [TypeOrmModule.forRoot({
@@ -20,8 +22,8 @@ import { AuthModule } from './auth/auth.module';
     database: "store",
     synchronize: true,
     logging: false,
-    entities: [Student, School, Event]
-  }) ,EventsModule, SchoolModule, AuthModule],
+    entities: [Student, School, Event, Token]
+  }) ,EventsModule, SchoolModule, AuthModule, StudentModule, TokenModule],
   controllers: [AppController],
   providers: [AppService],
 })

@@ -6,8 +6,6 @@ import { School } from './entities/school.entity';
 import { Event } from '../events/entities/event.entity';
 import { EventsService } from '../events/events.service';
 import { AuthModule } from '../auth/auth.module';
-import { StudentModule } from '../student/student.module';
-
 
 @Module({
   imports: [

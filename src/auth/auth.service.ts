@@ -1,15 +1,17 @@
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { StudentService } from '../student/student.service';
 import { SchoolService } from '../school/school.service';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
+import { TokenService } from '../token/token.service';
 
 @Injectable()
 export class AuthService {
     constructor(
         private studentService: StudentService,
         private schoolService: SchoolService,
-        private jwtService: JwtService
+        private jwtService: JwtService,
+        private tokenService: TokenService,
     ) {}
 
     async validateStudent(email: string, pass: string): Promise<any> {
@@ -40,8 +42,10 @@ export class AuthService {
 
     async login(user: any) {
         const payload = { username: user.email, sub: user.id };
+        const token = this.jwtService.sign(payload);
+        this.tokenService.create(token, user.email);
         return {
-          access_token: this.jwtService.sign(payload),
+          access_token: token
         };
     }
 }
