@@ -75,4 +75,8 @@ export class SchoolService {
   async remove(id: number) {
     return await this.schoolRepo.delete(id)
   }
+
+  async findOneLogin(email: string): Promise<School | undefined> {
+    return await this.schoolRepo.findOne({where: {emailRes: email}});
+  }
 }
