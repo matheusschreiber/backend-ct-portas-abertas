@@ -12,8 +12,8 @@ import { SchoolModule } from '../school/school.module';
   imports: [
     TypeOrmModule.forFeature([Token]),
     forwardRef(() => AuthModule),
-    StudentModule,
-    SchoolModule
+    forwardRef(() => StudentModule),
+    forwardRef(() => SchoolModule),
   ],
   controllers: [TokenController],
   providers: [TokenService, AuthService],

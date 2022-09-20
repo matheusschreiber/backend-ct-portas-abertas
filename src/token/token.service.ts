@@ -1,11 +1,11 @@
 import { forwardRef, HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Student } from '../student/entities/student.entity';
 import { Repository } from 'typeorm';
 import { UpdateTokenDto } from './dto/update-token.dto';
 import { Token } from './entities/token.entity';
-import { School } from '../school/entities/school.entity';
 import { AuthService } from '../auth/auth.service';
+import { SchoolService } from '../school/school.service';
+import { StudentService } from '../student/student.service';
 
 @Injectable()
 export class TokenService {
@@ -13,8 +13,10 @@ export class TokenService {
   constructor(
     @InjectRepository(Token)
     private tokenRepo: Repository<Token>,
-    private studentRepo: Repository<Student>,
-    private schoolRepo: Repository<School>,
+    @Inject(forwardRef(() => StudentService))
+    private studentService: StudentService,
+    @Inject(forwardRef(() => SchoolService))
+    private schoolService: SchoolService,
     @Inject(forwardRef(() => AuthService))
     private authService: AuthService
   ) {} 
@@ -34,8 +36,8 @@ export class TokenService {
   async refreshToken(oldToken: string) {
     let objToken = await this.tokenRepo.findOne({where: {hash: oldToken}});
     if (objToken) {
-      let student = await this.studentRepo.findOne({where: {email: objToken.username}});
-      let school = await this.schoolRepo.findOne({where: {emailRes: objToken.username}});
+      let student = await this.studentService.findOneLogin(objToken.username);
+      let school = await this.schoolService.findOneLogin(objToken.username);
 
       if (student && !school) {
         return this.authService.login(student);
