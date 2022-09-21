@@ -1,7 +1,6 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { StudentService } from '../student/student.service';
 import { SchoolService } from '../school/school.service';
-import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { TokenService } from '../token/token.service';
 
@@ -42,8 +41,17 @@ export class AuthService {
 
     async login(user: any) {
         const payload = { username: user.email, sub: user.id };
+
+        /* se não achou por "email" é porque é escola, não aluno */
+        if (!user.email) {
+            payload.username = user.emailRes;
+        }
+
         const token = this.jwtService.sign(payload);
-        this.tokenService.create(token, user.email);
+
+        if (!user.email) this.tokenService.create(token, user.emailRes); 
+        else this.tokenService.create(token, user.email);
+
         return {
           access_token: token
         };

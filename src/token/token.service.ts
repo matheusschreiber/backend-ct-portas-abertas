@@ -38,10 +38,11 @@ export class TokenService {
     if (objToken) {
       let student = await this.studentService.findOneLogin(objToken.username);
       let school = await this.schoolService.findOneLogin(objToken.username);
-
+      
+      /* acha a escola ou aluno */
       if (student && !school) {
         return this.authService.login(student);
-      } else if (student && !school) {
+      } else if (!student && school) {
         return this.authService.login(school);
       }
 
@@ -50,21 +51,5 @@ export class TokenService {
         errorMessage: 'Token inválido'
       }, HttpStatus.UNAUTHORIZED);
     }
-  }
-
-  findAll() {
-    return `This action returns all token`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} token`;
-  }
-
-  update(id: number, updateTokenDto: UpdateTokenDto) {
-    return `This action updates a #${id} token`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} token`;
   }
 }
