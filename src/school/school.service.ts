@@ -31,6 +31,11 @@ export class SchoolService {
     return await this.schoolRepo.findOne({where: {id: id}, relations:["events"]})
   }
 
+  async findEvents(id: number) {
+    const school = await this.schoolRepo.findOne({where: {id: id}, relations:["events"]})
+    return school.events
+  }
+
   async addEvent(id: number, updateSchoolDto: UpdateSchoolDto) {
     
     const eventID = updateSchoolDto.event
