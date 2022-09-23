@@ -31,6 +31,11 @@ export class StudentService {
     return await this.studentRepo.findOne({where: {id: id}, relations: ["events"]})
   }
 
+  async findEvents(id: number) {
+    const student = await this.studentRepo.findOne({where: {id: id}, relations: ["events"]});
+    return student.events;
+  }
+
   async addEvent(id: number, updateStudentDto: UpdateStudentDto) {
 
     const eventID = updateStudentDto.event

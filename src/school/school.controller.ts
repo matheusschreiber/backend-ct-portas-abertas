@@ -46,6 +46,12 @@ export class SchoolController {
   }
 
   @UseGuards(JwtAuthGuard) // para usar essa rota, é necessário passar o token no header da requisição
+  @Get('events/:id')
+  findEvents(@Param('id') id: string) {
+    return this.schoolService.findEvents(+id);
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Patch('add-event/:id')
   addEvent(@Param('id') id: string, @Body(new ValidationPipe({errorHttpStatusCode: 422})) updateSchoolDto: UpdateSchoolDto) {
     return this.schoolService.addEvent(+id, updateSchoolDto);
