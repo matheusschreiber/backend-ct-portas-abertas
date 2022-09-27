@@ -41,10 +41,11 @@ export class AuthService {
 
     async login(user: any) {
         const payload = { username: user.email, sub: user.id };
-
+        let type='student';
         /* se não achou por "email" é porque é escola, não aluno */
         if (!user.email) {
             payload.username = user.emailRes;
+            type='school'
         }
 
         const token = this.jwtService.sign(payload);
@@ -53,7 +54,11 @@ export class AuthService {
         else this.tokenService.create(token, user.email);
 
         return {
-          access_token: token
+          access_token: token,
+          id: user.id,
+          type,
+          name:user.name,
+          studentsAmount: user.studentsAmount?user.studentsAmount:0
         };
     }
 }
