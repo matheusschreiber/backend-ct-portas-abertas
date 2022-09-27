@@ -38,8 +38,7 @@ export class StudentService {
 
   async addEvent(id: number, updateStudentDto: UpdateStudentDto) {
 
-    const eventID = updateStudentDto.event
-    const event = await this.eventRepo.findOneBy(eventID)
+    const event = await this.eventRepo.findOneBy(updateStudentDto.event)
     let student = await this.findOne(id)
 
     // Se o evento já estiver cheio
@@ -53,7 +52,7 @@ export class StudentService {
       throw new HttpException("You are already registered at event", HttpStatus.BAD_REQUEST)
     }
 
-    await this.eventService.updateFilled(eventID,1)
+    await this.eventService.updateFilled(event.id,1)
     student.events.push(event)
     
     return await this.studentRepo.save(student)
@@ -61,8 +60,7 @@ export class StudentService {
 
   async removeEvent(id: number, updateStudentDto: UpdateStudentDto){
 
-    const eventID = updateStudentDto.event
-    const event = await this.eventRepo.findOneBy(eventID)
+    const event = await this.eventRepo.findOneBy(updateStudentDto.event)
     let student = await this.findOne(id)
 
     const foundEvent = student.events.find(stdevent => stdevent.id === event.id)
@@ -70,14 +68,22 @@ export class StudentService {
       throw new HttpException("You are not registered at this event", HttpStatus.BAD_REQUEST)
     }
 
-    const studentEvents = student.events
-    studentEvents.splice(studentEvents.indexOf(event),1)
+    const eventIndex = student.events.findIndex(e => e.id === event.id);
+    student.events.splice(eventIndex,1);
     
-    await this.eventService.updateFilled(eventID,-1)
+    await this.eventService.updateFilled(event.id,-1)
     return await this.studentRepo.save(student)
   }
 
   async remove(id: number) {
+
+    const student = await this.findOne(id);
+    const studentEvents = student.events;
+
+    for (let i = 0; i < Object.keys(studentEvents).length; i++) {
+      await this.eventService.updateFilled(studentEvents[i].id,-1)
+    }
+
     return await this.studentRepo.delete(id);
   }
 

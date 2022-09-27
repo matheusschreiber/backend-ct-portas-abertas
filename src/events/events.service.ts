@@ -35,9 +35,9 @@ export class EventsService {
   }
 
   //function without controller
-  async updateFilled(id: object, amount: number) {
-    const event = await this.eventRepo.findOneBy(id)
+  async updateFilled(id: number, amount: number) {
+    const event = await this.eventRepo.findOneBy({id});
     event.filled+=amount
-    return this.eventRepo.save(event)
+    return this.eventRepo.save(event);
   }
 }

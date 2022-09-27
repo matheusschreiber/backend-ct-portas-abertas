@@ -18,28 +18,32 @@ export class SchoolService {
     private eventService: EventsService
   ){}
 
+   
   async create(createSchoolDto: CreateSchoolDto) {
     const school = this.schoolRepo.create(createSchoolDto)
     return this.schoolRepo.save(school)
   }
 
+
   async findAll() {
     return this.schoolRepo.find({relations: ["events"]})
   }
 
+
   async findOne(id: number) {
     return await this.schoolRepo.findOne({where: {id: id}, relations:["events"]})
   }
+
 
   async findEvents(id: number) {
     const school = await this.schoolRepo.findOne({where: {id: id}, relations:["events"]})
     return school.events
   }
 
+
   async addEvent(id: number, updateSchoolDto: UpdateSchoolDto) {
     
-    const eventID = updateSchoolDto.event
-    const event = await this.eventRepo.findOneBy(eventID)
+    const event = await this.eventRepo.findOneBy(updateSchoolDto.event)
     let school = await this.findOne(id)
 
     // Se o evento já estiver cheio
@@ -53,16 +57,16 @@ export class SchoolService {
       throw new HttpException("You are already registered at event", HttpStatus.BAD_REQUEST)
     }
 
-    await this.eventService.updateFilled(eventID, school.studentsAmount)
+    await this.eventService.updateFilled(event.id, school.studentsAmount)
     school.events.push(event)
     
     return await this.schoolRepo.save(school)
   }
 
+
   async removeEvent(id: number, updateSchoolDto: UpdateSchoolDto){
 
-    const eventID = updateSchoolDto.event
-    const event = await this.eventRepo.findOneBy(eventID)
+    const event = await this.eventRepo.findOneBy(updateSchoolDto.event)
     let school = await this.findOne(id)
 
     const foundEvent = school.events.find(scevent => scevent.id === event.id)
@@ -70,16 +74,26 @@ export class SchoolService {
       throw new HttpException("You are not registered at this event", HttpStatus.BAD_REQUEST)
     }
 
-    const schoolEvents = school.events
-    schoolEvents.splice(schoolEvents.indexOf(event),1)
-    
-    await this.eventService.updateFilled(eventID,-school.studentsAmount)
+    const eventIndex = school.events.findIndex(e => e.id === event.id);
+    school.events.splice(eventIndex,1);
+
+    await this.eventService.updateFilled(event.id ,-school.studentsAmount)
     return await this.schoolRepo.save(school)
   }
 
+  
   async remove(id: number) {
+
+    const school = await this.findOne(id);
+    const schoolEvents = school.events;
+
+    for (let i = 0; i < Object.keys(schoolEvents).length; i++) {
+      await this.eventService.updateFilled(schoolEvents[i].id, -school.studentsAmount)
+    }
+    
     return await this.schoolRepo.delete(id)
   }
+
 
   async findOneLogin(email: string): Promise<School | undefined> {
     return await this.schoolRepo.findOne({where: {emailRes: email}});
