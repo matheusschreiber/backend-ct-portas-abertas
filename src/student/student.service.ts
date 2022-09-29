@@ -19,6 +19,10 @@ export class StudentService {
   ){}
 
   async create(createStudentDto: CreateStudentDto) {
+    const alreadyRegistered = await this.studentRepo.findOne({where: {email: createStudentDto.email }, relations: ["events"]});
+    
+    if (alreadyRegistered) throw new HttpException("Esse email já foi registrado, utilize outro", HttpStatus.BAD_REQUEST)
+
     const student = await this.studentRepo.create(createStudentDto);
     return await this.studentRepo.save(student);
   }
@@ -43,13 +47,13 @@ export class StudentService {
 
     // Se o evento já estiver cheio
     if(event.capacity === event.filled){
-      throw new HttpException("Event is already full", HttpStatus.BAD_REQUEST)
+      throw new HttpException(`O evento ${event.title} está lotado`, HttpStatus.BAD_REQUEST)
     }
 
     //Se o estudante já está cadastrado no evento
     const foundEvent = student.events.find(stdevent => stdevent.id === event.id)
     if(foundEvent){
-      throw new HttpException("You are already registered at event", HttpStatus.BAD_REQUEST)
+      throw new HttpException(`Você já esta registrado(a) no evento ${foundEvent.title}`, HttpStatus.BAD_REQUEST)
     }
 
     await this.eventService.updateFilled(event.id,1)
@@ -65,7 +69,7 @@ export class StudentService {
 
     const foundEvent = student.events.find(stdevent => stdevent.id === event.id)
     if(!foundEvent){
-      throw new HttpException("You are not registered at this event", HttpStatus.BAD_REQUEST)
+      throw new HttpException("Você não está registrado(a) nesse evento", HttpStatus.BAD_REQUEST)
     }
 
     const eventIndex = student.events.findIndex(e => e.id === event.id);
