@@ -20,6 +20,11 @@ export class SchoolService {
 
    
   async create(createSchoolDto: CreateSchoolDto) {
+    
+    const alreadyRegistered = await this.schoolRepo.findOne({where: {emailRes: createSchoolDto.emailRes}, relations:["events"]})
+
+    if (alreadyRegistered) throw new HttpException("Esse email já foi registrado, utilize outro", HttpStatus.BAD_REQUEST)
+
     const school = this.schoolRepo.create(createSchoolDto)
     return this.schoolRepo.save(school)
   }
@@ -48,13 +53,13 @@ export class SchoolService {
 
     // Se o evento já estiver cheio
     if(event.capacity < (event.filled + school.studentsAmount)){
-      throw new HttpException("Impossible to register all students at this event", HttpStatus.BAD_REQUEST)
+      throw new HttpException(`Impossível inscrever todos os alunos no evento ${event.title}`, HttpStatus.BAD_REQUEST)
     }
 
     //Se o estudante já está cadastrado no evento
     const foundEvent = school.events.find(scevent => scevent.id === event.id)
     if(foundEvent){
-      throw new HttpException("You are already registered at event", HttpStatus.BAD_REQUEST)
+      throw new HttpException(`Escola já está registrada no evento ${event.title}`, HttpStatus.BAD_REQUEST)
     }
 
     await this.eventService.updateFilled(event.id, school.studentsAmount)
@@ -71,7 +76,7 @@ export class SchoolService {
 
     const foundEvent = school.events.find(scevent => scevent.id === event.id)
     if(!foundEvent){
-      throw new HttpException("You are not registered at this event", HttpStatus.BAD_REQUEST)
+      throw new HttpException("Escola não está registrada nesse evento", HttpStatus.BAD_REQUEST)
     }
 
     const eventIndex = school.events.findIndex(e => e.id === event.id);

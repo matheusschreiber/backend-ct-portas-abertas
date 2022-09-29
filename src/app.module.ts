@@ -15,7 +15,7 @@ import { Token } from './token/entities/token.entity';
 @Module({
   imports: [TypeOrmModule.forRoot({
     type: "postgres",
-    host: "localhost",
+    host: "dbctportasabertas",
     port: 5432,
     username: "postgres",
     password: "root",
@@ -23,7 +23,7 @@ import { Token } from './token/entities/token.entity';
     synchronize: true,
     logging: false,
     entities: [Student, School, Event, Token]
-  }) ,EventsModule, SchoolModule, AuthModule, StudentModule, TokenModule],
+  }), EventsModule, SchoolModule, AuthModule, StudentModule, TokenModule],
   controllers: [AppController],
   providers: [AppService],
 })
