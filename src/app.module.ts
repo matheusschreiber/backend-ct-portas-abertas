@@ -11,11 +11,13 @@ import { Student } from './student/entities/student.entity';
 import { AuthModule } from './auth/auth.module';
 import { TokenModule } from './token/token.module';
 import { Token } from './token/entities/token.entity';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [TypeOrmModule.forRoot({
+  imports: [ConfigModule.forRoot({ isGlobal: true }),
+    TypeOrmModule.forRoot({
     type: "postgres",
-    host: "dbctportasabertas",
+    host: "localhost", //mudar para dbctportasabertas no ambiente de prod
     port: 5432,
     username: "postgres",
     password: "root",
@@ -23,7 +25,12 @@ import { Token } from './token/entities/token.entity';
     synchronize: true,
     logging: false,
     entities: [Student, School, Event, Token]
-  }), EventsModule, SchoolModule, AuthModule, StudentModule, TokenModule],
+    }),
+    EventsModule,
+    SchoolModule,
+    AuthModule,
+    StudentModule,
+    TokenModule],
   controllers: [AppController],
   providers: [AppService],
 })

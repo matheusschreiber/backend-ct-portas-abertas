@@ -1,13 +1,19 @@
 import { HttpException, HttpStatus, Injectable, NestMiddleware } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { Request, Response, NextFunction } from 'express';
+
 
 @Injectable()
 export class ApiKeyMiddleWare implements NestMiddleware {
+  
+  constructor(private readonly configservice: ConfigService){}
+  
   use(req: Request, res: Response, next: NextFunction) {
-    console.log('Request...', req.body);
 
     const key = req.body.key;
-    if(key !== '12345678910')
+    const secretKey = this.configservice.get("API_KEY");
+
+    if(key !== secretKey)
         throw new HttpException("Api key inválida!", HttpStatus.FORBIDDEN); 
     
     next();
