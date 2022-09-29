@@ -1,8 +1,9 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { EventsService } from './events.service';
 import { EventsController } from './events.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Event } from './entities/event.entity';
+import { ApiKeyMiddleWare } from './middleware/apikey.middleware';
 
 @Module({
   // Tentar adicionar outros módulos
@@ -10,4 +11,12 @@ import { Event } from './entities/event.entity';
   controllers: [EventsController],
   providers: [EventsService]
 })
-export class EventsModule {}
+
+export class EventsModule implements NestModule{
+
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(ApiKeyMiddleWare)
+      .forRoutes(EventsController);
+  }
+}
