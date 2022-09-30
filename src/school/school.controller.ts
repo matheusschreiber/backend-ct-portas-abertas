@@ -40,7 +40,7 @@ export class SchoolController {
     return this.schoolService.findAll();
   }
 
-  @Get(':id')
+  @Get('find/:id')
   findOne(@Param('id') id: string) {
     return this.schoolService.findOne(+id);
   }

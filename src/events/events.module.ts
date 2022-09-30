@@ -3,7 +3,7 @@ import { EventsService } from './events.service';
 import { EventsController } from './events.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Event } from './entities/event.entity';
-import { ApiKeyMiddleWare } from './middleware/apikey.middleware';
+import { ApiKeyMiddleWare } from '../middleware/apikey.middleware';
 
 @Module({
   // Tentar adicionar outros módulos

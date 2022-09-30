@@ -1,4 +1,4 @@
-import { forwardRef, Module } from '@nestjs/common';
+import { forwardRef, MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { SchoolService } from './school.service';
 import { SchoolController } from './school.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -6,6 +6,7 @@ import { School } from './entities/school.entity';
 import { Event } from '../events/entities/event.entity';
 import { EventsService } from '../events/events.service';
 import { AuthModule } from '../auth/auth.module';
+import { ApiKeyMiddleWare } from '../middleware/apikey.middleware';
 
 @Module({
   imports: [
@@ -16,4 +17,18 @@ import { AuthModule } from '../auth/auth.module';
   providers: [SchoolService, EventsService],
   exports: [SchoolService]
 })
-export class SchoolModule {}
+
+export class SchoolModule implements NestModule{
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(ApiKeyMiddleWare)
+      .exclude(
+        'school/auth/login',
+        'school/events/:id',
+        'school/add-event/:id',
+        'remove-event/:id',
+        'school/:id'
+      )
+      .forRoutes(SchoolController);
+  }
+}

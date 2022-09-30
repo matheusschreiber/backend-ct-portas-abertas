@@ -13,6 +13,10 @@ export class ApiKeyMiddleWare implements NestMiddleware {
     const key = req.body.key;
     const secretKey = this.configservice.get("API_KEY");
 
+    if(!key){
+      throw new HttpException("Requisição necessita de uma Api key!", HttpStatus.BAD_REQUEST);
+    }
+
     if(key !== secretKey)
         throw new HttpException("Api key inválida!", HttpStatus.FORBIDDEN); 
     

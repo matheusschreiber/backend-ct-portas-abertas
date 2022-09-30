@@ -43,7 +43,7 @@ export class StudentController {
     return this.studentService.findAll();
   }
 
-  @Get(':id')
+  @Get('find/:id')
   findOne(@Param('id') id: string) {
     return this.studentService.findOne(+id);
   }
