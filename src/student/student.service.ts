@@ -120,11 +120,14 @@ export class StudentService {
           password: student.password,
         }
     }
-
     this.mailerService.sendMail(mail);
   }
 
-  // async updatePassword(updatePasswordDto: UpdatePasswordDto, update: boolean){
-  //   console.log("oi");
-  // }
+  async updatePassword(id: number, updatePasswordDto: UpdatePasswordDto){
+    try {
+      return await this.studentRepo.update(id, updatePasswordDto);
+    } catch (err) {
+      throw new HttpException("Falha na atualização da senha. Tente novamente!", HttpStatus.INTERNAL_SERVER_ERROR)     
+    }
+  }
 }

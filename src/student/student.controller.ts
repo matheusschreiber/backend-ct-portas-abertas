@@ -79,9 +79,9 @@ export class StudentController {
     return this.studentService.recoverPassword(recoverPasswordDto);
   }
 
-  // @UseGuards(JwtAuthGuard)
-  // @Patch('recover-password?update=true')
-  // updatePassword(@Query('update') update: boolean, @Body(new ValidationPipe({errorHttpStatusCode:422})) updatePasswordDto: UpdatePasswordDto){
-  //   return this.studentService.updatePassword(updatePasswordDto, update);
-  // }
+  @UseGuards(JwtAuthGuard)
+  @Patch('update-password/:id')
+  updatePassword(@Param('id') id: string, @Body(new ValidationPipe({errorHttpStatusCode:422})) updatePasswordDto: UpdatePasswordDto){
+    return this.studentService.updatePassword(+id, updatePasswordDto);
+  }
 }
