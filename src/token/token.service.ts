@@ -1,7 +1,6 @@
 import { forwardRef, HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { UpdateTokenDto } from './dto/update-token.dto';
 import { Token } from './entities/token.entity';
 import { AuthService } from '../auth/auth.service';
 import { SchoolService } from '../school/school.service';

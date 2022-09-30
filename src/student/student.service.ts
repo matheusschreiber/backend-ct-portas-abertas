@@ -6,6 +6,9 @@ import { UpdateStudentDto } from './dto/update-student.dto';
 import { Student } from './entities/student.entity';
 import { Event } from '../events/entities/event.entity';
 import { EventsService } from '../events/events.service';
+import { MailerService } from '@nestjs-modules/mailer';
+import { RecoverPasswordDto } from './dto/recover-password.dto';
+import { UpdatePasswordDto } from './dto/update-password.dto';
 
 @Injectable()
 export class StudentService {
@@ -15,7 +18,8 @@ export class StudentService {
     private studentRepo: Repository<Student>,
     @InjectRepository(Event)
     private eventRepo: Repository<Event>,
-    private eventService: EventsService
+    private eventService: EventsService,
+    private mailerService: MailerService,
   ){}
 
   async create(createStudentDto: CreateStudentDto) {
@@ -94,4 +98,33 @@ export class StudentService {
   async findOneLogin(email: string): Promise<Student | undefined> {
     return await this.studentRepo.findOne({where: {email: email}});
   }
+
+
+  //=====================================Editing=================================================//
+
+  async recoverPassword(recoverDto: RecoverPasswordDto){
+    
+    console.log(recoverDto.email) 
+
+    const student = await this.studentRepo.findOne({where:{email: recoverDto.email}});
+    if(!student){
+      throw new HttpException("Este email não está cadastrado", HttpStatus.BAD_REQUEST);
+    }
+
+    const mail = {
+      to: student.email,
+        from: 'noreply@application.com',
+        subject: 'Recuperação de senha - CT de portas abertas',
+        template: 'recover-password',
+        context: {
+          password: student.password,
+        }
+    }
+
+    this.mailerService.sendMail(mail);
+  }
+
+  // async updatePassword(updatePasswordDto: UpdatePasswordDto, update: boolean){
+  //   console.log("oi");
+  // }
 }

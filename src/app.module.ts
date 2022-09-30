@@ -1,7 +1,5 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { EventsModule } from './events/events.module';
 import { SchoolModule } from './school/school.module';
 import { StudentModule } from './student/student.module';
@@ -12,6 +10,8 @@ import { AuthModule } from './auth/auth.module';
 import { TokenModule } from './token/token.module';
 import { Token } from './token/entities/token.entity';
 import { ConfigModule } from '@nestjs/config';
+import { MailerModule } from '@nestjs-modules/mailer';
+import { mailerConfig } from './config/mailer.config';
 
 @Module({
   imports: [ConfigModule.forRoot({ isGlobal: true }),
@@ -26,12 +26,11 @@ import { ConfigModule } from '@nestjs/config';
     logging: false,
     entities: [Student, School, Event, Token]
     }),
+    MailerModule.forRoot(mailerConfig),
     EventsModule,
     SchoolModule,
     AuthModule,
     StudentModule,
-    TokenModule],
-  controllers: [AppController],
-  providers: [AppService],
+    TokenModule]
 })
 export class AppModule {}

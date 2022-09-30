@@ -8,7 +8,8 @@ Patch,
 Param,
 Delete,
 ValidationPipe,
-UseGuards
+UseGuards,
+Query
 } from '@nestjs/common';
 import { StudentService } from './student.service';
 import { CreateStudentDto } from './dto/create-student.dto';
@@ -16,6 +17,8 @@ import { UpdateStudentDto } from './dto/update-student.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from '../auth/auth.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { RecoverPasswordDto } from './dto/recover-password.dto';
+import { UpdatePasswordDto } from './dto/update-password.dto';
 
 @Controller('student')
 export class StudentController {
@@ -68,4 +71,17 @@ export class StudentController {
   remove(@Param('id') id: string) {
     return this.studentService.remove(+id);
   }
+
+  //adicionei as 2 rotas abaixo
+
+  @Post('recover-password')
+  recoverPassword(@Body(new ValidationPipe({errorHttpStatusCode:422})) recoverPasswordDto: RecoverPasswordDto){
+    return this.studentService.recoverPassword(recoverPasswordDto);
+  }
+
+  // @UseGuards(JwtAuthGuard)
+  // @Patch('recover-password?update=true')
+  // updatePassword(@Query('update') update: boolean, @Body(new ValidationPipe({errorHttpStatusCode:422})) updatePasswordDto: UpdatePasswordDto){
+  //   return this.studentService.updatePassword(updatePasswordDto, update);
+  // }
 }
