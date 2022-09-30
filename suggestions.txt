@@ -1,0 +1,3 @@
+Middleware global - adicionar nas rotas de estudantes e escolas
+mailerconfig com env variables
+criar rota de atualização de senha
