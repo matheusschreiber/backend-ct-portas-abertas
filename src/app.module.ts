@@ -7,13 +7,13 @@ import { AuthModule } from './auth/auth.module';
 import { TokenModule } from './token/token.module';
 import { ConfigModule } from '@nestjs/config';
 import { MailerModule } from '@nestjs-modules/mailer';
-import { mailerConfig } from './config/mailer.config';
 import { typeOrmConfig } from './config/typeOrm.config';
+import  mailerConfig  from './config/mailer.config';
 
 @Module({
-  imports: [ConfigModule.forRoot({ isGlobal: true }),
+  imports: [ConfigModule.forRoot({ isGlobal: true, load: [mailerConfig] }),
     TypeOrmModule.forRoot(typeOrmConfig),
-    MailerModule.forRoot(mailerConfig),
+    MailerModule.forRoot(mailerConfig()),
     EventsModule,
     SchoolModule,
     AuthModule,
