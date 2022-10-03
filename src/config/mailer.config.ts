@@ -12,5 +12,5 @@ export const mailerConfig: MailerOptions = {
     },
   },
 
-  transport: `smtps://joaopaulomoura5328@gmail.com:ovhywavdktocpuee@smtp.gmail.com`,
+  transport: `smtps://joaopaulomoura5328@gmail.com:senha@smtp.gmail.com`,
 };

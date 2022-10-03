@@ -9,7 +9,6 @@ Param,
 Delete,
 ValidationPipe,
 UseGuards,
-Query
 } from '@nestjs/common';
 import { StudentService } from './student.service';
 import { CreateStudentDto } from './dto/create-student.dto';

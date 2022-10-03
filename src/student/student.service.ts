@@ -57,7 +57,7 @@ export class StudentService {
     //Se o estudante já está cadastrado no evento
     const foundEvent = student.events.find(stdevent => stdevent.id === event.id)
     if(foundEvent){
-      throw new HttpException(`Você já esta registrado(a) no evento ${foundEvent.title}`, HttpStatus.BAD_REQUEST)
+      throw new HttpException(`Você já está registrado(a) no evento ${foundEvent.title}`, HttpStatus.BAD_REQUEST)
     }
 
     await this.eventService.updateFilled(event.id,1)
@@ -104,7 +104,9 @@ export class StudentService {
 
   async recoverPassword(recoverDto: RecoverPasswordDto){
     
-    console.log(recoverDto.email) 
+    if(!recoverDto.email){
+      throw new HttpException("É preciso passar o email na requisição!", HttpStatus.BAD_REQUEST);
+    }
 
     const student = await this.studentRepo.findOne({where:{email: recoverDto.email}});
     if(!student){
