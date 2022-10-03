@@ -1,3 +1,4 @@
-Middleware global - adicionar nas rotas de estudantes e escolas
-mailerconfig com env variables
-criar rota de atualização de senha
+Adicionar rotad de recuperar e atualizar senha nas escolas
+Adicionar credenciais do mailerConfig e typeOrmConfig no .env
+Adicionar rota de confirmação de EMAIL
+Adicionar rota de atualização de quantidade de alunos
