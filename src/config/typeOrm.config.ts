@@ -4,14 +4,15 @@ import { Student } from "src/student/entities/student.entity";
 import { Token } from "src/token/entities/token.entity";
 import { Event } from "src/events/entities/event.entity"
 
-export const typeOrmConfig: TypeOrmModuleOptions = {
-    type: "postgres",
-    host: "localhost", //mudar para dbctportasabertas no ambiente de prod
-    port: 5432,
-    username: "postgres",
-    password: "root",
-    database: "store",
-    synchronize: true,
-    logging: false,
+export default (): TypeOrmModuleOptions => ({
+    type: process.env.TYPEORM_TYPE as any,
+    host: process.env.TYPEORM_HOST,
+    port: parseInt(process.env.TYPEORM_PORT),
+    username: process.env.TYPEORM_DB_USERNAME,
+    password: process.env.TYPEORM_DB_PASSWORD,
+    database: process.env.TYPEORM_DB_DATABASE,
+    synchronize: Boolean(JSON.parse(process.env.TYPEORM_SYNCHRONIZE)),
+    logging: Boolean(JSON.parse(process.env.TYPEORM_LOGGING)),
     entities: [Student, School, Event, Token]       
-}
+    }
+)
