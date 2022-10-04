@@ -27,7 +27,7 @@ export class SchoolModule implements NestModule{
         'school/auth/login',
         'school/events/:id',
         'school/add-event/:id',
-        'remove-event/:id',
+        'school/remove-event/:id',
         'school/:id'
       )
       .forRoutes(SchoolController);
