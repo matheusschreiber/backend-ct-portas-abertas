@@ -16,6 +16,8 @@ import { UpdateSchoolDto } from './dto/update-school.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from '../auth/auth.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { RecoverPasswordDto } from './dto/recover-password.dto';
+import { UpdatePasswordDto } from './dto/update-password.dto';
 
 @Controller('school')
 export class SchoolController {
@@ -67,5 +69,16 @@ export class SchoolController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.schoolService.remove(+id);
+  }
+
+  @Post('recover-password')
+  recoverPassword(@Body(new ValidationPipe({errorHttpStatusCode:422})) recoverPasswordDto: RecoverPasswordDto){
+    return this.schoolService.recoverPassword(recoverPasswordDto);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Patch('update-password/:id')
+  updatePassword(@Param('id') id: string, @Body(new ValidationPipe({errorHttpStatusCode:422})) updatePasswordDto: UpdatePasswordDto){
+    return this.schoolService.updatePassword(+id, updatePasswordDto);
   }
 }

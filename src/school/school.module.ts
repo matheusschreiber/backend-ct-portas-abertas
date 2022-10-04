@@ -23,6 +23,7 @@ export class SchoolModule implements NestModule{
     consumer
       .apply(ApiKeyMiddleWare)
       .exclude(
+        'school/update-password/:id',
         'school/auth/login',
         'school/events/:id',
         'school/add-event/:id',
