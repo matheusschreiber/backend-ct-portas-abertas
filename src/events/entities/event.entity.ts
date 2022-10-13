@@ -4,7 +4,8 @@ import { Column, Entity, ManyToMany, PrimaryGeneratedColumn, Timestamp } from "t
 
 export enum EventType {
     visit = 'visit',
-    workshop = 'workshop'
+    workshop = 'workshop',
+    booth = 'booth'
 }
 
 @Entity({name: "Events"})
