@@ -7,17 +7,17 @@ import { UpdateEventDto } from './dto/update-event.dto';
 export class EventsController {
   constructor(private readonly eventsService: EventsService) {}
 
-  @Post()
+  @Post('new')
   create(@Body() createEventDto: CreateEventDto) {
     return this.eventsService.create(createEventDto);
   }
 
-  @Get()
+  @Post()
   findAll() {
     return this.eventsService.findAll();
   }
 
-  @Get(':id')
+  @Post(':id')
   findOne(@Param('id') id: string) {
     return this.eventsService.findOne(+id);
   }
