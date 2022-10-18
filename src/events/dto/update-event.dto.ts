@@ -15,4 +15,6 @@ export class UpdateEventDto extends PartialType(CreateEventDto) {
     filled: number
 
     type: EventType 
+
+    key: string
 }
