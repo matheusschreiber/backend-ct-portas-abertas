@@ -27,6 +27,7 @@ export class EventsService {
   }
 
   async update(id: number, updateEventDto: UpdateEventDto) {
+    delete updateEventDto.key;
     return await this.eventRepo.update(id, updateEventDto);
   }
 
