@@ -9,6 +9,7 @@ import { EventsService } from '../events/events.service';
 import { RecoverPasswordDto } from './dto/recover-password.dto';
 import { MailerService } from '@nestjs-modules/mailer';
 import { UpdatePasswordDto } from './dto/update-password.dto';
+import { UpdateStudentsAmountDto } from './dto/updateStudentsAmount.dto';
 
 @Injectable()
 export class SchoolService {
@@ -139,5 +140,20 @@ export class SchoolService {
     } catch (err) {
       throw new HttpException("Falha na atualização da senha. Tente novamente!", HttpStatus.INTERNAL_SERVER_ERROR)     
     }
+  }
+
+  async updateStudentsAmount(id: number, updateStudentsAmountDto: UpdateStudentsAmountDto){
+    const oldStudentsAmount: number = (await this.schoolRepo.findOneBy({id: id})).studentsAmount;
+    const newStudentsAmount: number = updateStudentsAmountDto.studentsAmount;
+    const difference: number = newStudentsAmount - oldStudentsAmount;
+    
+    console.log("difference", difference);
+
+    const schoolEvents = await this.findEvents(id);
+    schoolEvents.forEach(event => {
+      this.eventService.updateFilled(event.id, difference);
+    })
+
+    return await this.schoolRepo.update(id, updateStudentsAmountDto);
   }
 }

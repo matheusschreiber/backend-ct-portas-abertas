@@ -28,7 +28,8 @@ export class SchoolModule implements NestModule{
         'school/events/:id',
         'school/add-event/:id',
         'school/remove-event/:id',
-        'school/:id'
+        'school/:id',
+        'school/update-students-amount/:id'
       )
       .forRoutes(SchoolController);
   }
