@@ -146,8 +146,6 @@ export class SchoolService {
     const oldStudentsAmount: number = (await this.schoolRepo.findOneBy({id: id})).studentsAmount;
     const newStudentsAmount: number = updateStudentsAmountDto.studentsAmount;
     const difference: number = newStudentsAmount - oldStudentsAmount;
-    
-    console.log("difference", difference);
 
     const schoolEvents = await this.findEvents(id);
     schoolEvents.forEach(event => {
