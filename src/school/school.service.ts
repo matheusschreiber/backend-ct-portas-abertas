@@ -149,6 +149,9 @@ export class SchoolService {
 
     const schoolEvents = await this.findEvents(id);
     schoolEvents.forEach(event => {
+      if (event.capacity<event.filled+difference) {
+        throw new HttpException(`O Evento ${event.title} está lotado! Não foi possível inscrever mais ninguém!`, HttpStatus.INTERNAL_SERVER_ERROR)     
+      }
       this.eventService.updateFilled(event.id, difference);
     })
 
