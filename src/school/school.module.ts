@@ -1,4 +1,4 @@
-import { forwardRef, MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { forwardRef, MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
 import { SchoolService } from './school.service';
 import { SchoolController } from './school.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -7,6 +7,7 @@ import { Event } from '../events/entities/event.entity';
 import { EventsService } from '../events/events.service';
 import { AuthModule } from '../auth/auth.module';
 import { ApiKeyMiddleWare } from '../middleware/apikey.middleware';
+import { PasswordEncrypt } from 'src/middleware/crypto.middleware copy';
 
 @Module({
   imports: [
@@ -32,5 +33,11 @@ export class SchoolModule implements NestModule{
         'school/update-students-amount/:id'
       )
       .forRoutes(SchoolController);
+    
+    consumer
+      .apply(PasswordEncrypt)
+      .forRoutes(
+        { path: 'school', method: RequestMethod.POST }
+      );
   }
 }

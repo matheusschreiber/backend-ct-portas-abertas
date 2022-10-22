@@ -1,3 +1,5 @@
+import * as bcrypt from 'bcrypt';
+
 import { Injectable } from '@nestjs/common';
 import { StudentService } from '../student/student.service';
 import { SchoolService } from '../school/school.service';
@@ -19,7 +21,11 @@ export class AuthService {
         //     const { password, ...result } = student;
         //     return result;
         // }
-        if (student && pass === student.password) {
+        
+        if (student) {
+            const isMatch = await bcrypt.compare(pass, student.password);
+            if (!isMatch) return null
+            
             const { password, ...result } = student;
             return result;
         }
@@ -32,7 +38,12 @@ export class AuthService {
         //     const { password, ...result } = school;
         //     return result;
         // }
-        if (school && pass === school.password) {
+
+        
+        if (school) {
+            const isMatch = await bcrypt.compare(pass, school.password);
+            if (!isMatch) return null
+                
             const { password, ...result } = school;
             return result;
         }
