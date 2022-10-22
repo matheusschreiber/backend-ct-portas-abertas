@@ -21,7 +21,13 @@ export class Event {
     local: string
 
     @Column({type: "timestamp", nullable: true})
-    time: Date 
+    start: Date 
+
+    @Column({type: "timestamp", nullable: true})
+    end: Date 
+
+    @Column({ nullable: true })
+    description: string
 
     @Column()
     capacity: number
