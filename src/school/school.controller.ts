@@ -18,6 +18,7 @@ import { AuthService } from '../auth/auth.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RecoverPasswordDto } from './dto/recover-password.dto';
 import { UpdatePasswordDto } from './dto/update-password.dto';
+import { UpdateStudentsAmountDto } from './dto/updateStudentsAmount.dto';
 
 @Controller('school')
 export class SchoolController {
@@ -80,5 +81,11 @@ export class SchoolController {
   @Patch('update-password/:id')
   updatePassword(@Param('id') id: string, @Body(new ValidationPipe({errorHttpStatusCode:422})) updatePasswordDto: UpdatePasswordDto){
     return this.schoolService.updatePassword(+id, updatePasswordDto);
+  }
+  
+  @UseGuards(JwtAuthGuard)
+  @Patch('update-students-amount/:id')
+  updateStudentsAmount(@Param('id') id: string, @Body(new ValidationPipe({errorHttpStatusCode:422})) updateStudentsAmountDto: UpdateStudentsAmountDto){
+    return this.schoolService.updateStudentsAmount(+id, updateStudentsAmountDto);
   }
 }
