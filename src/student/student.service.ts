@@ -49,6 +49,10 @@ export class StudentService {
     const event = await this.eventRepo.findOneBy(updateStudentDto.event)
     let student = await this.findOne(id)
 
+    if(!student){
+      throw new HttpException("Usuário não encontrado", HttpStatus.BAD_REQUEST)
+    }
+
     // Se o evento já estiver cheio
     if(event.capacity === event.filled){
       throw new HttpException(`O evento ${event.title} está lotado`, HttpStatus.BAD_REQUEST)
@@ -86,6 +90,11 @@ export class StudentService {
   async remove(id: number) {
 
     const student = await this.findOne(id);
+
+    if(!student){
+      throw new HttpException("Usuário não encontrado", HttpStatus.BAD_REQUEST)
+    }
+
     const studentEvents = student.events;
 
     for (let i = 0; i < Object.keys(studentEvents).length; i++) {

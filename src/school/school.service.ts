@@ -56,6 +56,10 @@ export class SchoolService {
     const event = await this.eventRepo.findOneBy(updateSchoolDto.event)
     let school = await this.findOne(id)
 
+    if(!school){
+      throw new HttpException("Usuário não encontrado", HttpStatus.BAD_REQUEST)
+    }
+
     // Se o evento já estiver cheio
     if(event.capacity < (event.filled + school.studentsAmount)){
       throw new HttpException(`Impossível inscrever todos os alunos no evento ${event.title}`, HttpStatus.BAD_REQUEST)
@@ -95,6 +99,11 @@ export class SchoolService {
   async remove(id: number) {
 
     const school = await this.findOne(id);
+    
+    if(!school){
+      throw new HttpException("Usuário não encontrado", HttpStatus.BAD_REQUEST)
+    }
+    
     const schoolEvents = school.events;
 
     for (let i = 0; i < Object.keys(schoolEvents).length; i++) {

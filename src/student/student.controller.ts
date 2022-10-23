@@ -65,7 +65,6 @@ export class StudentController {
     return this.studentService.removeEvent(+id, updateStudentDto);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.studentService.remove(+id);

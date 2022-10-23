@@ -32,7 +32,7 @@ export class EventsController {
     return this.eventsService.remove(+id);
   }
 
-  @Get('subscribed/:id')
+  @Post('subscribed/:id')
   getStudentsSubscribedEvent(@Param('id') id: string) {
     return this.eventsService.getSubscribedInEvent(+id);
   }

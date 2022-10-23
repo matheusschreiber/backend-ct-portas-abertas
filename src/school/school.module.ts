@@ -8,10 +8,11 @@ import { EventsService } from '../events/events.service';
 import { AuthModule } from '../auth/auth.module';
 import { ApiKeyMiddleWare } from '../middleware/apikey.middleware';
 import { PasswordEncrypt } from 'src/middleware/crypto.middleware copy';
+import { Student } from 'src/student/entities/student.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([School, Event]),
+    TypeOrmModule.forFeature([School, Event, Student]),
     forwardRef(() => AuthModule), // importação duplicada
   ],
   controllers: [SchoolController],
