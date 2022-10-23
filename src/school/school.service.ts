@@ -149,6 +149,10 @@ export class SchoolService {
 
     const schoolEvents = await this.findEvents(id);
     schoolEvents.forEach(event => {
+      // Se o evento já estiver cheio
+      if(event.capacity < (event.filled + difference)){
+        throw new HttpException(`Impossível inscrever todos os alunos no evento ${event.title}`, HttpStatus.BAD_REQUEST)
+      }
       this.eventService.updateFilled(event.id, difference);
     })
 

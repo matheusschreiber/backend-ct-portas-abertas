@@ -7,10 +7,11 @@ import { Event } from '../events/entities/event.entity';
 import { EventsService } from '../events/events.service';
 import { AuthModule } from '../auth/auth.module';
 import { ApiKeyMiddleWare } from '../middleware/apikey.middleware';
+import { School } from 'src/school/entities/school.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Student, Event]), 
+    TypeOrmModule.forFeature([Student, Event, School]), 
     forwardRef(() => AuthModule) // importação duplicada
   ],
   controllers: [StudentController],
