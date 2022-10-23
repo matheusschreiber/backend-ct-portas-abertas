@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { School } from 'src/school/entities/school.entity';
+import { Student } from 'src/student/entities/student.entity';
 import { Repository } from 'typeorm';
 import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
@@ -10,7 +12,11 @@ export class EventsService {
 
   constructor(
     @InjectRepository(Event)
-    private eventRepo: Repository<Event>
+    private eventRepo: Repository<Event>,
+    @InjectRepository(Student)
+    private studentRepo: Repository<Student>,
+    @InjectRepository(School)
+    private schoolRepo: Repository<School>
   ){}
 
   async create(createEventDto: CreateEventDto) {
@@ -40,5 +46,39 @@ export class EventsService {
     const event = await this.eventRepo.findOneBy({id});
     event.filled+=amount
     return this.eventRepo.save(event);
+  }
+
+  // function to get all the students and schools subscribed in an event
+  async getSubscribedInEvent(id: number) {
+    let subscribed = [];
+    const students = await this.studentRepo.find({relations: ["events"]});
+    const event = await this.eventRepo.findOneBy({id: id});
+
+    // passing through all students
+    students.forEach(student => {
+      let i = 0;
+      if (student.events.length > 0) { // checking if is in any event
+        if (student.events[i].title == event.title) {
+          subscribed.push(student);
+        }
+      }
+      i++;
+    });
+
+
+    const schools = await this.schoolRepo.find({relations: ["events"]});
+
+    // passing through all schools
+    schools.forEach(school => {
+      let i = 0;
+      if (school.events.length > 0) { // checking if is in any event
+        if (school.events[i].title == event.title) {
+          subscribed.push(school);
+        }
+      }
+      i++;
+    });
+
+    return subscribed;
   }
 }
