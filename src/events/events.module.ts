@@ -6,6 +6,7 @@ import { Event } from './entities/event.entity';
 import { ApiKeyMiddleWare } from '../middleware/apikey.middleware';
 import { Student } from 'src/student/entities/student.entity';
 import { School } from 'src/school/entities/school.entity';
+import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
   // Tentar adicionar outros módulos
