@@ -31,4 +31,9 @@ export class EventsController {
   remove(@Param('id') id: string) {
     return this.eventsService.remove(+id);
   }
+
+  @Get('subscribed/:id')
+  getStudentsSubscribedEvent(@Param('id') id: string) {
+    return this.eventsService.getSubscribedInEvent(+id);
+  }
 }
