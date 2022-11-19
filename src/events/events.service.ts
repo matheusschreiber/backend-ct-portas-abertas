@@ -52,17 +52,14 @@ export class EventsService {
   async getSubscribedInEvent(id: number) {
     let subscribed = [];
     const students = await this.studentRepo.find({relations: ["events"]});
-    const event = await this.eventRepo.findOneBy({id: id});
 
     // passing through all students
     students.forEach(student => {
-      let i = 0;
       if (student.events.length > 0) { // checking if is in any event
-        if (student.events[i].title == event.title) {
-          subscribed.push(student);
-        }
+        student.events.map((e)=>{
+          if (e.id == id) subscribed.push(student);
+        })
       }
-      i++;
     });
 
 
@@ -70,13 +67,11 @@ export class EventsService {
 
     // passing through all schools
     schools.forEach(school => {
-      let i = 0;
       if (school.events.length > 0) { // checking if is in any event
-        if (school.events[i].title == event.title) {
-          subscribed.push(school);
-        }
+        school.events.map((e)=>{
+          if (e.id == id) subscribed.push(school);
+        })
       }
-      i++;
     });
 
     return subscribed;
